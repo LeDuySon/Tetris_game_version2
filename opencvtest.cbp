@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes" ?>
+<CodeBlocks_project_file>
+	<FileVersion major="1" minor="6" />
+	<Project>
+		<Option title="opencvtest" />
+		<Option pch_mode="2" />
+		<Option compiler="gcc" />
+		<Build>
+			<Target title="Debug">
+				<Option output="bin/Debug/opencvtest" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Debug/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-g" />
+					<Add directory="../../../Downloads/opencv/opencv/build/include" />
+				</Compiler>
+				<Linker>
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_calib3d349.dll.a" />
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_core349.dll.a" />
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_dnn349.dll.a" />
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_features2d349.dll.a" />
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_flann349.dll.a" />
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_highgui349.dll.a" />
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_imgcodecs349.dll.a" />
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_imgproc349.dll.a" />
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_ml349.dll.a" />
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_objdetect349.dll.a" />
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_photo349.dll.a" />
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_shape349.dll.a" />
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_stitching349.dll.a" />
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_superres349.dll.a" />
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_video349.dll.a" />
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_videoio349.dll.a" />
+					<Add library="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/lib/libopencv_videostab349.dll.a" />
+					<Add directory="../../../Downloads/opencv/opencv/mybuild/install/x64/mingw/bin" />
+				</Linker>
+			</Target>
+			<Target title="Release">
+				<Option output="bin/Release/opencvtest" prefix_auto="1" extension_auto="1" />
+				<Option object_output="obj/Release/" />
+				<Option type="1" />
+				<Option compiler="gcc" />
+				<Compiler>
+					<Add option="-O2" />
+				</Compiler>
+				<Linker>
+					<Add option="-s" />
+				</Linker>
+			</Target>
+		</Build>
+		<Compiler>
+			<Add option="-Wall" />
+			<Add option="-fexceptions" />
+		</Compiler>
+		<Unit filename="SDL_utils.cpp" />
+		<Unit filename="SDL_utils.h" />
+		<Unit filename="main.cpp" />
+		<Extensions />
+	</Project>
+</CodeBlocks_project_file>
