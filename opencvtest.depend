@@ -798,18 +798,20 @@
 	<vector>
 	"opencv2/imgproc.hpp"
 
-1591514445 source:c:\users\admin\desktop\game\tetris\main.cpp
+1591575854 source:c:\users\admin\desktop\game\tetris\main.cpp
 	<iostream>
 	<SDL.h>
 	<SDL_image.h>
-	<cstdlib>
 	<ctime>
 	<string>
 	<vector>
 	<unistd.h>
 	<SDL_ttf.h>
-	"SDL_utils.h"
 	<SDL_mixer.h>
+	<opencv2/core/core.hpp>
+	<opencv2/highgui/highgui.hpp>
+	"SDL_utils.h"
+	"handreg.h"
 
 1591512921 source:c:\users\admin\desktop\game\tetris\hand_options.cpp
 
@@ -823,4 +825,24 @@
 	<iostream>
 	<SDL.h>
 	<string>
+
+1591536610 c:\users\admin\desktop\game\tetris\handreg.h
+	<iostream>
+	<string>
+	"opencv2/opencv.hpp"
+
+1591540001 source:c:\users\admin\desktop\game\tetris\handreg.cpp
+	<cmath>
+	<iostream>
+	<string>
+	"handreg.h"
+	"opencv2/opencv.hpp"
+	<vector>
+	<algorithm>
+
+1558503098 c:\users\admin\downloads\opencv\opencv\build\include\opencv2\core\core.hpp
+	"opencv2/core.hpp"
+
+1558503098 c:\users\admin\downloads\opencv\opencv\build\include\opencv2\highgui\highgui.hpp
+	"opencv2/highgui.hpp"
 

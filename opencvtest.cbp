@@ -55,6 +55,8 @@
 		</Compiler>
 		<Unit filename="SDL_utils.cpp" />
 		<Unit filename="SDL_utils.h" />
+		<Unit filename="handreg.cpp" />
+		<Unit filename="handreg.h" />
 		<Unit filename="main.cpp" />
 		<Extensions />
 	</Project>

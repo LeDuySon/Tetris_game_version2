@@ -1,14 +1,17 @@
 #include <iostream>
 #include <SDL.h>
 #include <SDL_image.h>
-#include <cstdlib>
 #include <ctime>
 #include <string>
 #include <vector>
 #include <unistd.h>
 #include <SDL_ttf.h>
-#include "SDL_utils.h"
 #include <SDL_mixer.h>
+#include <opencv2/core/core.hpp>
+#include <opencv2/highgui/highgui.hpp>
+//include header
+#include "SDL_utils.h"
+#include "handreg.h"
 using namespace std;
 
 SDL_Color fontColor = {255, 255, 255, 255};
@@ -29,6 +32,7 @@ bool isSubmenu = false;
 bool END_GAME = false;
 bool mergeShadow = false;
 
+int fps = 0;
 int maps[M][N] = {0};
 SDL_Rect block[4];
 SDL_Rect nextblock[4];
@@ -43,7 +47,7 @@ int shapes[7][4] =
     2,3,4,5, // O
 };
 
-struct Point{
+struct Points{
     int x, y;
     };
 
@@ -63,6 +67,7 @@ public:
         else if(manageQ()) buffer[last++] = a;
         else{
             cout << "queue is full" << endl;
+
         }
     }
     int dequeue(){
@@ -71,8 +76,11 @@ public:
             cout << "Queue is empty" << endl;
             return -1;
         }
-
     }
+    int sizeQ(){
+        return last;
+    }
+
     int top(){
         return buffer[last-1];
     }
@@ -94,6 +102,8 @@ public:
     };
 Queue shape(2), colors(2);
 
+//Store Point
+Queue pointSTR(30);
 bool valid(){
 
     for(int i = 0; i < 4; i++){
@@ -455,7 +465,7 @@ int main(int argc, char *argv[]){
         }
         blockDR[i].y = 0;
     }
-    Point prev[4];
+    Points prev[4];
     SDL_Rect crop, crop_next;
     // init variable
 
@@ -489,6 +499,29 @@ int main(int argc, char *argv[]){
     int dx=0, dy=1;
 
 
+    //load videocapture
+    cv::VideoCapture cap(0);
+    if(!cap.isOpened()){
+        cout << "Cant open videostream" << endl;
+        return -1;
+    }
+    //get size of frame
+//    int frame_width = cap.get(CV_CAP_PROP_FRAME_WIDTH);
+//    int frame_height = cap.get(CV_CAP_PROP_FRAME_HEIGHT);
+
+    cv::Mat frame;
+    char keys;
+    //set ROI
+    int rect_size = 300;
+    cv::Rect roi;
+    roi.x = 200;
+    roi.y = 120;
+    roi.width = rect_size;
+    roi.height = rect_size;
+    cv::Mat cropROI, maskSkin, copyframe;
+    cv::Point centerC;
+    int diff;
+    string inform = "";
     // start game
     while(running){
         if(isMain){
@@ -513,6 +546,45 @@ int main(int argc, char *argv[]){
             }
         if(isPlay){
             while(isPlay){
+                cap >> frame;
+                fps++;
+                cropROI = frame.clone()(roi);
+
+                maskSkin = transforms(cropROI);
+                centerC = get_center(maskSkin);
+                centerC.x += 200;
+                centerC.y += 120;
+                cv::circle(frame, centerC, 5, cv::Scalar(0, 255,0), -1);
+
+                cv::rectangle(frame, roi, cv::Scalar(0, 255, 0), 2);
+                pointSTR.enqueue(centerC.x);
+                if(fps = 60){
+                    if(pointSTR.sizeQ() < 30){
+                    for(int i = 0; i < pointSTR.sizeQ(); i++){
+                        if(pointSTR.top() != 0 && pointSTR.bottom() != 0){
+                            diff = pointSTR.top() - pointSTR.bottom();
+                            if(diff > 50){
+                                cv::putText(frame, "Move right", cv::Point(10, 20), cv::FONT_HERSHEY_SIMPLEX, 0.75, cv::Scalar(0,0,255),2);
+                                dx = 1;
+                            }else if(diff < -50){
+                                cv::putText(frame, "Move left", cv::Point(10, 20), cv::FONT_HERSHEY_SIMPLEX, 0.75, cv::Scalar(0,0,255),2);
+                                dx = -1;
+                            }else{
+                                cv::putText(frame, "Not moving", cv::Point(10, 20), cv::FONT_HERSHEY_SIMPLEX, 0.75, cv::Scalar(0,0,255),2);
+                            }
+                    fps = 0;
+                    }
+                    }
+                }else{
+                    for(int i = 0; i < pointSTR.sizeQ(); i++) pointSTR.dequeue();
+                }
+                }
+
+
+
+
+                cv::imshow("a", maskSkin);
+
                 while( SDL_PollEvent(&e) ){
                     if(MUSIC){
                         if( Mix_PlayingMusic() == 0 )
@@ -613,7 +685,7 @@ int main(int argc, char *argv[]){
                     next_block(renderer, image, crop_next, iw, ih, shape.top(), colors.top());
                     render_score(renderer, font_Texture, level, lines, Text_c, FONT);
 
-                    Point center;
+                    Points center;
                     center.x = block[1].x;
                     center.y = block[1].y;
                     for(int i = 0; i < 4; i++){
@@ -749,6 +821,15 @@ int main(int argc, char *argv[]){
                 }
 
                 SDL_RenderPresent(renderer);
+                imshow("Frame",frame);
+
+                keys = (char)cv::waitKey(1);
+                // press e to end...
+                if(keys == 101){
+                    break;
+                }
+
+
             }
         }
         if(isPause){
@@ -791,6 +872,9 @@ int main(int argc, char *argv[]){
     }
 
     waitUntilKeyPressed();
+    cap.release();
+    cv::destroyAllWindows();
+
     SDL_DestroyTexture(menu);
     SDL_DestroyTexture(gameover);
     SDL_DestroyTexture(music_off);
